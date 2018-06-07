@@ -9,11 +9,13 @@ import android.net.Uri;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
+import android.support.v4.app.ShareCompat;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private Uri m_uri;
+    Uri resultUri = null;
     private static final int REQUEST_CHOOSER = 1000;
     private ImageView imageView = null;
 
@@ -49,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.button_twitter:
                     Log.d("debug","button_tap, Perform action on click");
-                    postingCommentOnTwitter();
+                    //postingCommentOnTwitter();
+                    postingImageOnTwitter();
                     break;
             }
         }
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 // キャンセル時
                 return ;
             }
-            Uri resultUri = (data != null ? data.getData() : m_uri);
+            resultUri = (data != null ? data.getData() : m_uri);
             if(resultUri == null) {
                 // 取得失敗
                 return;
@@ -95,5 +98,23 @@ public class MainActivity extends AppCompatActivity {
     };
 
     // Step2 画像を投稿
+    private void postingImageOnTwitter(){
+        String message="";
+        String imagePath= String.valueOf(resultUri);
+        Log.d("debug","imagepath" + imagePath);
 
+        ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(this);
+
+// データをセットする
+        builder.setChooserTitle("Choose App");
+        builder.setText(message);
+        if(imagePath!=null){
+            builder.setType("image/png");
+            builder.addStream(resultUri);
+        }else{
+            builder.setType("text/plain");
+        }
+// アプリ選択画面を起動
+        builder.startChooser();
+    };
 }
