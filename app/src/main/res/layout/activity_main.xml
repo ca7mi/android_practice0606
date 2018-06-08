@@ -6,22 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="26dp"
-        android:layout_marginEnd="150dp"
-        android:layout_marginStart="150dp"
+    <EditText
+        android:id="@+id/searchBox"
+        android:layout_width="261dp"
+        android:layout_height="43dp"
         android:layout_marginTop="16dp"
-        android:text="ポッチャマ！"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="検索ワードを入力してね"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
 
     <Button
         android:id="@+id/button_select"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="49dp"
         android:layout_marginEnd="48dp"
         android:layout_marginStart="29dp"
         android:layout_marginTop="26dp"
@@ -48,8 +45,18 @@
         android:layout_marginTop="31dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/searchBox"
         app:srcCompat="@color/colorPrimary"
         android:src="@drawable/pocchama" />
+
+    <Button
+        android:id="@+id/button_search"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="16dp"
+        android:text="SEARCH"
+        app:layout_constraintStart_toEndOf="@+id/searchBox"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

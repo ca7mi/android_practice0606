@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">android_practice0606_2</string>
+    <string name="consumer_key">DxRHwVfFj5d8VYPIPQkM2HbR0</string>
+    <string name="consumer_secret">vh3akujLQ0DHc2F85nf1x3ZqIcpI1yAHWfEJHuPMwA1LkpakWC</string>
+    <string name="access_token">810470530323124224-NeWDHHQruo7jrKW3HydIdUFVHseXeWE</string>
+    <string name="access_token_secret">AviB4cWpUTIBvGXJFiJWSDhR1nKb1H2XvyfJBDRKxH7IV</string>
+    <string name="callback_twitter">app://ca7miapp_twitter</string>
 </resources>
