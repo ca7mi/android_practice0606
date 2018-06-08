@@ -1,10 +1,8 @@
 package com.android_practice0606.ca7mi.android_practice0606_2;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private ConfigurationBuilder cb = new ConfigurationBuilder();
     private EditText searchBox = null;
     private String searchText = null;
+    private QueryResult searchResult = null;
+    public static ArrayList<Status> tweetList = new ArrayList<Status>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
                     };
                     task.execute();
 
+                    Intent intent = new Intent(getApplication(), ResultActivity.class);
+                    intent.putExtra("searchText",searchText);
+                    startActivity(intent);
                     break;
             }
         }
@@ -202,6 +207,8 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(status.getUser());
             // 発言した日時
             System.out.println(status.getCreatedAt());
+
+            tweetList.add(status);
         }
     }
 

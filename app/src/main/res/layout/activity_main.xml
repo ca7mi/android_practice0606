@@ -8,10 +8,10 @@
 
     <EditText
         android:id="@+id/searchBox"
-        android:layout_width="261dp"
+        android:layout_width="208dp"
         android:layout_height="43dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Tweetを探そう" />
@@ -20,22 +20,21 @@
         android:id="@+id/button_select"
         android:layout_width="wrap_content"
         android:layout_height="49dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginStart="29dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="26dp"
         android:text="Select Image"
-        app:layout_constraintEnd_toStartOf="@+id/button_twitter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_pocchama" />
 
     <Button
         android:id="@+id/button_twitter"
-        android:layout_width="169dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_width="96dp"
+        android:layout_height="49dp"
+        android:layout_marginEnd="50dp"
         android:layout_marginTop="26dp"
-        android:text="Posting on twitter"
         android:background="#2ECCFA"
+        android:text="Posting on twitter"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_pocchama" />
 
@@ -43,19 +42,19 @@
         android:id="@+id/image_pocchama"
         android:layout_width="385dp"
         android:layout_height="202dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/pocchama"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchBox"
-        app:srcCompat="@color/colorPrimary"
-        android:src="@drawable/pocchama" />
+        app:srcCompat="@color/colorPrimary" />
 
     <Button
         android:id="@+id/button_search"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
         android:text="SEARCH"
         app:layout_constraintStart_toEndOf="@+id/searchBox"
         app:layout_constraintTop_toTopOf="parent" />
