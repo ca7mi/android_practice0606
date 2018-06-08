@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import twitter4j.Query;
@@ -33,17 +34,8 @@ public class MainActivity extends AppCompatActivity {
     TwitterFactory twitterFactory = null;
     Twitter twitter = null;
     private ConfigurationBuilder cb = new ConfigurationBuilder();
-
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-
-    private static final int REQUEST_OAUTH=0;
-
-    private static long user_id=0L;
-    private static String screen_name=null;
-    private static String token=null;
-    private static String token_secret=null;
-
+    private EditText searchBox = null;
+    private String searchText = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
         final  Button button_search = findViewById(R.id.button_search);
         button_search.setOnClickListener(buttonClick);
+
+        searchBox = findViewById(R.id.searchBox);
 
     };
 
@@ -80,6 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.button_search :
                     Log.d("debug", "button_search Tap" );
+
+                    // 入力された検索ワードを取得
+                    if(searchBox.getText() != null){
+                        searchText = searchBox.getText().toString();
+                    }
+
                     createAuth();
                     Log.d("debug", "After createAuth" + twitter);
                     AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                             if(twitter !=null) {
                                 Log.d("debug", "search" + twitter);
                                 try {
-                                    searchForTwitter();
+                                    searchForTwitter(searchText);
                                 } catch (TwitterException e) {
                                     Log.d("debug", "error twitter" + twitter, e);
                                 }
@@ -183,11 +183,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void searchForTwitter() throws TwitterException {
+    private void searchForTwitter( String searchText) throws TwitterException {
         Query query = new Query();
 
-        // 検索ワードをセット（試しにバルスを検索）
-        query.setQuery("RICOH THETA V");
+        // 検索ワードをセット
+        query.setQuery(searchText);
 
         // 検索実行
         QueryResult result = twitter.search(query);
@@ -202,8 +202,6 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(status.getUser());
             // 発言した日時
             System.out.println(status.getCreatedAt());
-            // 他、取れる値はJavaDoc参照
-            // http://twitter4j.org/ja/javadoc/twitter4j/Tweet.html
         }
     }
 

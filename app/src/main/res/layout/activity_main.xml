@@ -10,10 +10,11 @@
         android:id="@+id/searchBox"
         android:layout_width="261dp"
         android:layout_height="43dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
-        android:text="検索ワードを入力してね"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp" />
+        tools:text="Tweetを探そう" />
 
     <Button
         android:id="@+id/button_select"
