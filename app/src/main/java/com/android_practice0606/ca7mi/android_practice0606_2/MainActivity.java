@@ -6,14 +6,15 @@ import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
 import android.net.Uri;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.widget.ImageView;
-
+import android.support.v4.app.ShareCompat;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 public class MainActivity extends AppCompatActivity {
 
     private Uri m_uri;
+    private Uri resultUri = null;
     private static final int REQUEST_CHOOSER = 1000;
     private ImageView imageView = null;
 
@@ -36,20 +37,14 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.button_select:
-                    Log.d("debug","button_push, Perform action on click");
-                    /*
-                    Intent intentGallery;
-                    intentGallery = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    intentGallery.addCategory(Intent.CATEGORY_OPENABLE);
-                    intentGallery.setType("image/jpeg");
-
-                    startActivityForResult(intentGallery, REQUEST_CHOOSER); */
+                    Log.d("debug","button_select, Perform action on click");
                     selectPicture();
                     break;
 
                 case R.id.button_twitter:
-                    Log.d("debug","button_tap, Perform action on click");
-                    postingCommentOnTwitter();
+                    Log.d("debug","button_twitter, Perform action on click");
+                    //postingCommentOnTwitter();
+                    postingImageOnTwitter();
                     break;
             }
         }
@@ -76,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 // キャンセル時
                 return ;
             }
-            Uri resultUri = (data != null ? data.getData() : m_uri);
+            resultUri = (data != null ? data.getData() : m_uri);
             if(resultUri == null) {
                 // 取得失敗
                 return;
@@ -95,5 +90,36 @@ public class MainActivity extends AppCompatActivity {
     };
 
     // Step2 画像を投稿
+    private void postingImageOnTwitter(){
+        String message="";
+        String imagePath= String.valueOf(resultUri);
+        Log.d("debug","imagepath" + imagePath);
 
+        ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(this);
+
+        // データをセットする
+        builder.setChooserTitle("Choose App");
+        builder.setText(message);
+        if(imagePath!=null){
+            builder.setType("image/png");
+            builder.addStream(resultUri);
+            // アプリ選択画面を起動
+            builder.startChooser();
+        }else{
+            nonImege();
+        }
+    };
+
+    private void nonImege(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("写真を選んでから投稿しましょう！")
+                .setTitle("Information")
+                .setIcon(R.drawable.pocchama)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+// ボタンをクリックしたときの動作
+                    }
+                });
+        builder.show();
+    };
 }
