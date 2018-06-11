@@ -17,8 +17,12 @@
         <TextView
             android:id="@+id/resultText"
             android:layout_width="match_parent"
-            android:layout_height="76dp"
-            android:text="" />
+            android:layout_height="50dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <ScrollView
             android:layout_width="match_parent"

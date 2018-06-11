@@ -46,17 +46,6 @@ public class ResultActivity extends AppCompatActivity {
     }
 
 
-  /*  private void showTweetList() {
-
-        StringBuilder stb = new StringBuilder();
-
-        for (int i = 0; i < mainActivity.tweetList.size(); i++) {
-            stb.append(mainActivity.tweetList.get(i));
-            textView.setText(stb);
-        }
-
-    }*/
-
     private void searchForTwitter(final String searchText) throws TwitterException {
 
         createAuth();
@@ -85,7 +74,7 @@ public class ResultActivity extends AppCompatActivity {
                             TextView tweet = new TextView(getApplicationContext());
 
                             createEntitiySupport();
-                            System.out.println("画像取得できた？" + es.getExtendedMediaEntities());
+                            System.out.println("画像取得できた？" + es.getURLEntities());
 
                             // 本文
                             tweetList.add(status.getText());

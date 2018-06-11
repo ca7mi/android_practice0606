@@ -84,6 +84,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/shaders" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/build/.DS_Store" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-manifest" />
@@ -118,6 +119,7 @@
     <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-27.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:/Users/kanamisugiyama/Sites/android_practice0606/app/libs/android-smart-image-view-1.0.0.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-solver:1.1.1@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.code.findbugs:jsr305:2.0.1@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test.espresso:espresso-core-3.0.2" level="project" />

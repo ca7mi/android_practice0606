@@ -32,15 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private Uri resultUri = null;
     private static final int REQUEST_CHOOSER = 1000;
     private ImageView imageView = null;
-    TwitterFactory twitterFactory = null;
     Twitter twitter = null;
-    private ConfigurationBuilder cb = new ConfigurationBuilder();
     private EditText searchBox = null;
     private String searchText = null;
-    private QueryResult searchResult = null;
-    public static ArrayList<Status> tweetList = new ArrayList<Status>();
-    public EntitySupport es;
-    public static ArrayList<EntitySupport> entitySupportList = new ArrayList<EntitySupport>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,78 +161,4 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void searchForTwitter( String searchText) throws TwitterException {
-        Query query = new Query();
-
-        // 検索ワードをセット
-        query.setQuery(searchText);
-
-        // 検索実行
-        QueryResult result = twitter.search(query);
-
-        System.out.println("ヒット数 : " + result.getTweets().size());
-
-        // 検索結果を見てみる
-        for (Status status : result.getTweets()) {
-
-            createEntitiySupport();
-            System.out.println("画像取得できた？"+es.getExtendedMediaEntities());
-            entitySupportList.add(es);
-
-            // 本文
-            System.out.println("Tweet内容"+status.getText());
-            // 発言したユーザ
-            System.out.println("Tweetした人"+status.getUser());
-            // 発言した日時
-            System.out.println("Tweetした日"+status.getCreatedAt());
-
-            tweetList.add(status);
-        }
-    }
-
-    private void createAuth(){
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(getString(R.string.consumer_key))
-                .setOAuthConsumerSecret(getString(R.string.consumer_secret))
-                .setOAuthAccessToken(getString(R.string.access_token))
-                .setOAuthAccessTokenSecret(getString(R.string.access_token_secret));
-
-        twitterFactory = new TwitterFactory(cb.build());
-        twitter = twitterFactory.getInstance();
-    };
-
-    private void createEntitiySupport(){
-        // Twitterの画像を取得
-        es = new EntitySupport() {
-            @Override
-            public UserMentionEntity[] getUserMentionEntities() {
-                return new UserMentionEntity[0];
-            }
-
-            @Override
-            public URLEntity[] getURLEntities() {
-                return new URLEntity[0];
-            }
-
-            @Override
-            public HashtagEntity[] getHashtagEntities() {
-                return new HashtagEntity[0];
-            }
-
-            @Override
-            public MediaEntity[] getMediaEntities() {
-                return new MediaEntity[0];
-            }
-
-            @Override
-            public ExtendedMediaEntity[] getExtendedMediaEntities() {
-                return new ExtendedMediaEntity[0];
-            }
-
-            @Override
-            public SymbolEntity[] getSymbolEntities() {
-                return new SymbolEntity[0];
-            }
-        };
-    }
 }
