@@ -16,6 +16,7 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
+import twitter4j.*;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private String searchText = null;
     private QueryResult searchResult = null;
     public static ArrayList<Status> tweetList = new ArrayList<Status>();
+    public EntitySupport es;
+    public static ArrayList<EntitySupport> entitySupportList = new ArrayList<EntitySupport>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,27 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         searchText = searchBox.getText().toString();
                     }
 
-                    createAuth();
                     Log.d("debug", "After createAuth" + twitter);
-                    AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
-                        @Override
-                        protected Boolean doInBackground(String... params) {
-                            //createAuth();
-                            if(twitter !=null) {
-                                Log.d("debug", "search" + twitter);
-                                try {
-                                    searchForTwitter(searchText);
-                                } catch (TwitterException e) {
-                                    Log.d("debug", "error twitter" + twitter, e);
-                                }
-                            } else {
-                                Log.d("debug", "twitter null" + twitter);
-                            }
-                            return true;
-                        };
-                    };
-                    task.execute();
-
                     Intent intent = new Intent(getApplication(), ResultActivity.class);
                     intent.putExtra("searchText",searchText);
                     startActivity(intent);
@@ -182,10 +165,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         builder.show();
-    };
-
-    private void asyncSearch(){
-
     }
 
     private void searchForTwitter( String searchText) throws TwitterException {
@@ -201,12 +180,17 @@ public class MainActivity extends AppCompatActivity {
 
         // 検索結果を見てみる
         for (Status status : result.getTweets()) {
+
+            createEntitiySupport();
+            System.out.println("画像取得できた？"+es.getExtendedMediaEntities());
+            entitySupportList.add(es);
+
             // 本文
-            System.out.println(status.getText());
+            System.out.println("Tweet内容"+status.getText());
             // 発言したユーザ
-            System.out.println(status.getUser());
+            System.out.println("Tweetした人"+status.getUser());
             // 発言した日時
-            System.out.println(status.getCreatedAt());
+            System.out.println("Tweetした日"+status.getCreatedAt());
 
             tweetList.add(status);
         }
@@ -222,4 +206,39 @@ public class MainActivity extends AppCompatActivity {
         twitterFactory = new TwitterFactory(cb.build());
         twitter = twitterFactory.getInstance();
     };
+
+    private void createEntitiySupport(){
+        // Twitterの画像を取得
+        es = new EntitySupport() {
+            @Override
+            public UserMentionEntity[] getUserMentionEntities() {
+                return new UserMentionEntity[0];
+            }
+
+            @Override
+            public URLEntity[] getURLEntities() {
+                return new URLEntity[0];
+            }
+
+            @Override
+            public HashtagEntity[] getHashtagEntities() {
+                return new HashtagEntity[0];
+            }
+
+            @Override
+            public MediaEntity[] getMediaEntities() {
+                return new MediaEntity[0];
+            }
+
+            @Override
+            public ExtendedMediaEntity[] getExtendedMediaEntities() {
+                return new ExtendedMediaEntity[0];
+            }
+
+            @Override
+            public SymbolEntity[] getSymbolEntities() {
+                return new SymbolEntity[0];
+            }
+        };
+    }
 }
