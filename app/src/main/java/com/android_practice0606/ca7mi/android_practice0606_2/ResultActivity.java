@@ -11,10 +11,20 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -25,6 +35,13 @@ public class ResultActivity extends AppCompatActivity {
     Twitter twitter = null;
     private ConfigurationBuilder cb = new ConfigurationBuilder();
     public EntitySupport es;
+
+    //取得件数
+    static final int TWEET_NUM = 20;
+
+    //保存対象の画像拡張子
+    static final String TARGET_EXTENSION = ".jpg";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +79,7 @@ public class ResultActivity extends AppCompatActivity {
 
                         // 検索ワードをセット
                         query.setQuery(searchText);
+                      //  query.setCount(TWEET_NUM);
 
                         // 検索実行
                         QueryResult result = twitter.search(query);
@@ -71,9 +89,23 @@ public class ResultActivity extends AppCompatActivity {
                         // 検索結果を見てみる
                         for (twitter4j.Status status : result.getTweets()) {
 
+                            createEntitiySupport();
+
                             TextView tweet = new TextView(getApplicationContext());
 
-                            createEntitiySupport();
+                        /*    MediaEntity[] arrMedia = status.getMediaEntities();
+                            for(MediaEntity media : arrMedia){
+                                if(media.getMediaURL().endsWith(TARGET_EXTENSION)) {
+                                    URL website = new URL(media.getMediaURL());
+                                    ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+                                    //保存ファイル名にStatusが持つ作成日を付与
+                                    DateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+                                    FileOutputStream fos =
+                                            new FileOutputStream("ImageFromTwitter" + df.format(status.getCreatedAt()) + TARGET_EXTENSION);
+                                    fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                                }
+                            }*/
+
                             System.out.println("画像取得できた？" + es.getURLEntities());
 
                             // 本文
@@ -87,6 +119,12 @@ public class ResultActivity extends AppCompatActivity {
                         }
                     } catch (TwitterException e) {
                         Log.d("debug", "error twitter" + twitter, e);
+                   /* } catch (FileNotFoundException e) {
+                        Log.d("debug", "FileNotFoundException", e);
+                    } catch (MalformedURLException e) {
+                        Log.d("debug", "MalformedURLException", e);
+                    } catch (IOException e) {
+                        Log.d("debug", "IOException", e); */
                     }
                 } else {
                     Log.d("debug", "twitter null" + twitter);
@@ -153,5 +191,7 @@ public class ResultActivity extends AppCompatActivity {
             }
         };
     }
+
+
 
 }
