@@ -52,7 +52,7 @@ public class ResultActivity extends AppCompatActivity {
     ArrayList<String> imageURLList = new ArrayList<String>();
 
     //取得件数
-    static final int TWEET_NUM = 10;
+    static final int TWEET_NUM = 30;
 
     //保存対象の画像拡張子
     static final String TARGET_EXTENSION = ".jpg" ;
@@ -112,19 +112,6 @@ public class ResultActivity extends AppCompatActivity {
                                 String filePath =  downloadImage(media.getMediaURL());
                                 imageURLList.add(filePath);
                             }
-
-                        /*    MediaEntity[] arrMedia = status.getMediaEntities();
-                            for(MediaEntity media : arrMedia){
-                                if(media.getMediaURL().endsWith(TARGET_EXTENSION)) {
-                                    URL website = new URL(media.getMediaURL());
-                                    ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-                                    //保存ファイル名にStatusが持つ作成日を付与
-                                    DateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-                                    FileOutputStream fos =
-                                            new FileOutputStream("ImageFromTwitter" + df.format(status.getCreatedAt()) + TARGET_EXTENSION);
-                                    fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-                                }
-                            }*/
 
                             System.out.println("画像取得できた？" + es.getURLEntities());
 
