@@ -2,29 +2,43 @@ package com.android_practice0606.ca7mi.android_practice0606_2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 
-import twitter4j.*;
+import twitter4j.EntitySupport;
+import twitter4j.ExtendedMediaEntity;
+import twitter4j.HashtagEntity;
+import twitter4j.MediaEntity;
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.SymbolEntity;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.URLEntity;
+import twitter4j.UserMentionEntity;
 import twitter4j.conf.ConfigurationBuilder;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -35,12 +49,13 @@ public class ResultActivity extends AppCompatActivity {
     Twitter twitter = null;
     private ConfigurationBuilder cb = new ConfigurationBuilder();
     public EntitySupport es;
+    ArrayList<String> imageURLList = new ArrayList<String>();
 
     //取得件数
-    static final int TWEET_NUM = 20;
+    static final int TWEET_NUM = 10;
 
     //保存対象の画像拡張子
-    static final String TARGET_EXTENSION = ".jpg";
+    static final String TARGET_EXTENSION = ".jpg" ;
 
 
     @Override
@@ -79,7 +94,7 @@ public class ResultActivity extends AppCompatActivity {
 
                         // 検索ワードをセット
                         query.setQuery(searchText);
-                      //  query.setCount(TWEET_NUM);
+                        query.setCount(TWEET_NUM);
 
                         // 検索実行
                         QueryResult result = twitter.search(query);
@@ -91,7 +106,12 @@ public class ResultActivity extends AppCompatActivity {
 
                             createEntitiySupport();
 
-                            TextView tweet = new TextView(getApplicationContext());
+                            MediaEntity[] arrMedia = status.getMediaEntities();
+                            for(MediaEntity media : arrMedia){
+                                Log.d("debug", "madiaURL : " + media.getMediaURL());
+                                String filePath =  downloadImage(media.getMediaURL());
+                                imageURLList.add(filePath);
+                            }
 
                         /*    MediaEntity[] arrMedia = status.getMediaEntities();
                             for(MediaEntity media : arrMedia){
@@ -134,6 +154,21 @@ public class ResultActivity extends AppCompatActivity {
 
             protected void onPostExecute(ArrayList<String> tweetList) {
 
+                for(String imageUrl : imageURLList){
+
+                    ImageView image = new ImageView(getApplicationContext());
+
+                    try {
+                        FileInputStream fileInputStream = openFileInput(imageUrl);
+                        Bitmap bm = BitmapFactory.decodeStream(fileInputStream);
+                        image.setImageBitmap(bm);
+                        linearLayout.addView(image);
+                        Log.d("debug", "imageUrlList" + imageUrl);
+                    } catch (FileNotFoundException e) {
+                        Log.d("debug", "FileNotFoundException imageUrl" ,e);
+                    }
+                }
+
                 for(String tweetText : tweetList){
                     TextView tweet = new TextView(getApplicationContext());
                     tweet.setText(tweetText);
@@ -155,6 +190,67 @@ public class ResultActivity extends AppCompatActivity {
 
         twitterFactory = new TwitterFactory(cb.build());
         twitter = twitterFactory.getInstance();
+    }
+
+    private String downloadImage(String strUrl){
+        try {
+
+            URL url = new URL(strUrl);
+
+            HttpURLConnection conn =
+                    (HttpURLConnection) url.openConnection();
+            conn.setAllowUserInteraction(false);
+            conn.setInstanceFollowRedirects(true);
+            conn.setRequestMethod("GET");
+            conn.connect();
+
+            int httpStatusCode = conn.getResponseCode();
+
+            if(httpStatusCode != HttpURLConnection.HTTP_OK){
+                throw new Exception();
+            }
+
+            String[] splitUrl = strUrl.split("/");
+            String inputPath = splitUrl[splitUrl.length-1];
+
+            // Input Stream
+            DataInputStream dataInStream
+                    = new DataInputStream(
+                    conn.getInputStream());
+
+            // Output Stream
+            DataOutputStream dataOutStream
+                    = new DataOutputStream(
+                    new BufferedOutputStream(
+                            openFileOutput(inputPath, Context.MODE_PRIVATE)));
+
+            // Read Data
+            byte[] b = new byte[4096];
+            int readByte = 0;
+
+            while(-1 != (readByte = dataInStream.read(b))){
+                dataOutStream.write(b, 0, readByte);
+            }
+
+            // Close Stream
+            dataInStream.close();
+            dataOutStream.close();
+
+            return inputPath;
+
+        } catch (FileNotFoundException e) {
+            Log.d("debug", "FileNotFoundException" ,e);
+        } catch (ProtocolException e) {
+            Log.d("debug", "ProtocolException" ,e);
+        } catch (MalformedURLException e) {
+            Log.d("debug", "MalformedURLException" ,e);
+        } catch (IOException e) {
+            Log.d("debug", "IOException" ,e);
+        } catch (Exception e) {
+            Log.d("debug", "Exception" ,e);
+        }
+
+        return null;
     }
 
     private void createEntitiySupport() {
